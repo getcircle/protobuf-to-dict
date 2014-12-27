@@ -12,7 +12,7 @@ class Test(unittest.TestCase):
         d = protobuf_to_dict(m)
         self.compare(m, d, ['nestedRepeated'])
 
-        m2 = dict_to_protobuf(MessageOfTypes, d)
+        m2 = dict_to_protobuf(d, MessageOfTypes)
         assert m == m2
 
     def test_use_enum_labels(self):
@@ -22,20 +22,20 @@ class Test(unittest.TestCase):
         assert d['enm'] == 'C'
         assert d['enmRepeated'] == ['A', 'C']
 
-        m2 = dict_to_protobuf(MessageOfTypes, d)
+        m2 = dict_to_protobuf(d, MessageOfTypes)
         assert m == m2
 
         d['enm'] = 'MEOW'
         with nose.tools.assert_raises(KeyError):
-            dict_to_protobuf(MessageOfTypes, d)
+            dict_to_protobuf(d, MessageOfTypes)
 
         d['enm'] = 'A'
         d['enmRepeated'] = ['B']
-        dict_to_protobuf(MessageOfTypes, d)
+        dict_to_protobuf(d, MessageOfTypes)
 
         d['enmRepeated'] = ['CAT']
         with nose.tools.assert_raises(KeyError):
-            dict_to_protobuf(MessageOfTypes, d)
+            dict_to_protobuf(d, MessageOfTypes)
 
     def test_repeated_enum(self):
         m = self.populate_MessageOfTypes()
@@ -43,12 +43,12 @@ class Test(unittest.TestCase):
         self.compare(m, d, ['enm', 'enmRepeated', 'nestedRepeated'])
         assert d['enmRepeated'] == ['A', 'C']
 
-        m2 = dict_to_protobuf(MessageOfTypes, d)
+        m2 = dict_to_protobuf(d, MessageOfTypes)
         assert m == m2
 
         d['enmRepeated'] = ['MEOW']
         with nose.tools.assert_raises(KeyError):
-            dict_to_protobuf(MessageOfTypes, d)
+            dict_to_protobuf(d, MessageOfTypes)
 
     def test_nested_repeated(self):
         m = self.populate_MessageOfTypes()
@@ -58,12 +58,12 @@ class Test(unittest.TestCase):
         self.compare(m, d, exclude=['nestedRepeated'])
         assert d['nestedRepeated'] == [{'req': str(i)} for i in range(10)]
 
-        m2 = dict_to_protobuf(MessageOfTypes, d)
+        m2 = dict_to_protobuf(d, MessageOfTypes)
         assert m == m2
 
     def test_reverse(self):
         m = self.populate_MessageOfTypes()
-        m2 = dict_to_protobuf(MessageOfTypes, protobuf_to_dict(m))
+        m2 = dict_to_protobuf(protobuf_to_dict(m), MessageOfTypes)
         assert m == m2
         m2.dubl = 0
         assert m2 != m
@@ -72,7 +72,7 @@ class Test(unittest.TestCase):
         m = self.populate_MessageOfTypes()
         d = protobuf_to_dict(m)
         d.pop('dubl')
-        m2 = dict_to_protobuf(MessageOfTypes, d)
+        m2 = dict_to_protobuf(d, MessageOfTypes)
         assert m2.dubl == 0
         assert m != m2
 
@@ -80,7 +80,7 @@ class Test(unittest.TestCase):
         m = self.populate_MessageOfTypes()
         d = protobuf_to_dict(m)
         d['dubl'] = 1
-        m2 = dict_to_protobuf(m, d)
+        m2 = dict_to_protobuf(d, m)
         assert m is m2
         assert m.dubl == 1
 
@@ -89,8 +89,8 @@ class Test(unittest.TestCase):
         d = protobuf_to_dict(m)
         d['meow'] = 1
         with nose.tools.assert_raises(KeyError):
-            m2 = dict_to_protobuf(MessageOfTypes, d)
-        m2 = dict_to_protobuf(MessageOfTypes, d, strict=False)
+            m2 = dict_to_protobuf(d, MessageOfTypes)
+        m2 = dict_to_protobuf(d, MessageOfTypes, strict=False)
         assert m == m2
 
     def populate_MessageOfTypes(self):
@@ -146,7 +146,7 @@ class Test(unittest.TestCase):
             assert exts[str(key.number)] == value
         assert exts[str(NestedExtension.extNested.number)]['req'] == 'nested'
 
-        deser = dict_to_protobuf(MessageOfTypes, res)
+        deser = dict_to_protobuf(res, MessageOfTypes)
         assert deser
         for key, value in primitives.items():
             assert deser.Extensions[key] == m.Extensions[key]

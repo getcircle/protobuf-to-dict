@@ -81,7 +81,7 @@ REVERSE_TYPE_CALLABLE_MAP = {
 }
 
 
-def dict_to_protobuf(pb_klass_or_instance, values, type_callable_map=REVERSE_TYPE_CALLABLE_MAP, strict=True):
+def dict_to_protobuf(values, pb_klass_or_instance, type_callable_map=REVERSE_TYPE_CALLABLE_MAP, strict=True):
     """Populates a protobuf model from a dictionary.
 
     :param pb_klass_or_instance: a protobuf message class, or an protobuf instance
@@ -96,7 +96,7 @@ def dict_to_protobuf(pb_klass_or_instance, values, type_callable_map=REVERSE_TYP
         instance = pb_klass_or_instance
     else:
         instance = pb_klass_or_instance()
-    return _dict_to_protobuf(instance, values, type_callable_map, strict)
+    return _dict_to_protobuf(values, instance, type_callable_map, strict)
 
 
 def _get_field_mapping(pb, dict_value, strict):
@@ -127,7 +127,7 @@ def _get_field_mapping(pb, dict_value, strict):
     return field_mapping
 
 
-def _dict_to_protobuf(pb, value, type_callable_map, strict):
+def _dict_to_protobuf(value, pb, type_callable_map, strict):
     fields = _get_field_mapping(pb, value, strict)
 
     for field, input_value, pb_value in fields:
@@ -135,14 +135,14 @@ def _dict_to_protobuf(pb, value, type_callable_map, strict):
             for item in input_value:
                 if field.type == FieldDescriptor.TYPE_MESSAGE:
                     m = pb_value.add()
-                    _dict_to_protobuf(m, item, type_callable_map, strict)
+                    _dict_to_protobuf(item, m, type_callable_map, strict)
                 elif field.type == FieldDescriptor.TYPE_ENUM and isinstance(item, basestring):
                     pb_value.append(_string_to_enum(field, item))
                 else:
                     pb_value.append(item)
             continue
         if field.type == FieldDescriptor.TYPE_MESSAGE:
-            _dict_to_protobuf(pb_value, input_value, type_callable_map, strict)
+            _dict_to_protobuf(input_value, pb_value, type_callable_map, strict)
             continue
 
         if field.type in type_callable_map:
