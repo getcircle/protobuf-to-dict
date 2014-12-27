@@ -115,6 +115,7 @@ class Test(unittest.TestCase):
         m.enm = MessageOfTypes.C #@UndefinedVariable
         m.enmRepeated.extend([MessageOfTypes.A, MessageOfTypes.C])
         m.range.extend(range(10))
+        m.optional_string = 'optional'
         return m
 
     def compare(self, m, d, exclude=None):
@@ -151,3 +152,10 @@ class Test(unittest.TestCase):
         for key, value in primitives.items():
             assert deser.Extensions[key] == m.Extensions[key]
         assert deser.Extensions[NestedExtension.extNested].req == m.Extensions[NestedExtension.extNested].req
+
+    def test_value_in_dict_is_none(self):
+        m = self.populate_MessageOfTypes()
+        res = protobuf_to_dict(m)
+        res['optional_string'] = None
+        d = dict_to_protobuf(res, MessageOfTypes)
+        self.assertEqual(d.optional_string, '')
