@@ -100,6 +100,7 @@ def dict_to_protobuf(values, pb_klass_or_instance, type_callable_map=REVERSE_TYP
 
 
 def _get_field_mapping(pb, dict_value, strict):
+    dict_value = dict_value or {}
     field_mapping = []
     for key, value in dict_value.items():
         if key == EXTENSION_CONTAINER:

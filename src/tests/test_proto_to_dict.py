@@ -157,5 +157,6 @@ class Test(unittest.TestCase):
         m = self.populate_MessageOfTypes()
         res = protobuf_to_dict(m)
         res['optional_string'] = None
+        res['nested'] = None
         d = dict_to_protobuf(res, MessageOfTypes)
         self.assertEqual(d.optional_string, '')
