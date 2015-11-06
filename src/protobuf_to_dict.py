@@ -1,3 +1,4 @@
+from google.protobuf.internal.containers import ScalarMap
 from google.protobuf.message import Message
 from google.protobuf.descriptor import FieldDescriptor
 
@@ -40,6 +41,10 @@ def protobuf_to_dict(pb, type_callable_map=TYPE_CALLABLE_MAP, use_enum_labels=Fa
     result_dict = {}
     extensions = {}
     for field, value in pb.ListFields():
+        if isinstance(value, ScalarMap):
+            result_dict[field.name] = dict(value.iteritems())
+            continue
+
         type_callable = _get_field_value_adaptor(pb, field, type_callable_map, use_enum_labels)
         if field.label == FieldDescriptor.LABEL_REPEATED:
             type_callable = repeated(type_callable)
@@ -132,6 +137,10 @@ def _dict_to_protobuf(value, pb, type_callable_map, strict):
     fields = _get_field_mapping(pb, value, strict)
 
     for field, input_value, pb_value in fields:
+        if isinstance(pb_value, ScalarMap):
+            pb_value.update(input_value)
+            continue
+
         if field.label == FieldDescriptor.LABEL_REPEATED:
             for item in input_value:
                 if field.type == FieldDescriptor.TYPE_MESSAGE:

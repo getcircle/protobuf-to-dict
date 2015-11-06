@@ -1,5 +1,6 @@
 import unittest
 from tests.sample_pb2 import MessageOfTypes, extDouble, extString, NestedExtension
+from tests.sample_proto3_pb2 import SomeMessage
 from protobuf_to_dict import protobuf_to_dict, dict_to_protobuf
 import base64
 import nose.tools
@@ -160,3 +161,18 @@ class Test(unittest.TestCase):
         res['nested'] = None
         d = dict_to_protobuf(res, MessageOfTypes)
         self.assertEqual(d.optional_string, '')
+
+    def test_message_with_proto3_map_protobuf_to_dict(self):
+        m = SomeMessage()
+        m.some_map['key1'] = 'value1'
+        m.some_map['key2'] = 'value2'
+        d = protobuf_to_dict(m)
+        some_map = d['some_map']
+        self.assertEqual(some_map['key1'], m.some_map['key1'])
+        self.assertEqual(some_map['key2'], m.some_map['key2'])
+
+    def test_message_with_proto3_map_dict_to_protobuf(self):
+        d = {'some_map': {'key1': 'value1', 'key2': 'value2'}}
+        m = dict_to_protobuf(d, SomeMessage)
+        self.assertEqual(m.some_map['key1'], d['some_map']['key1'])
+        self.assertEqual(m.some_map['key2'], d['some_map']['key2'])

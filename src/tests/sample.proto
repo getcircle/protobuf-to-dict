@@ -1,3 +1,4 @@
+syntax = "proto2";
 package tests;
 
 // protoc --python_out=src -Isrc src/tests/sample.proto

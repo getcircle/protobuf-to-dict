@@ -1,0 +1,8 @@
+syntax = "proto3";
+package tests.proto3;
+
+// protoc --python_out=src -Isrc src/tests/sample.proto
+
+message SomeMessage {
+    map<string, string> some_map = 1;
+}
