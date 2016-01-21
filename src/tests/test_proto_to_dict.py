@@ -176,3 +176,23 @@ class Test(unittest.TestCase):
         m = dict_to_protobuf(d, SomeMessage)
         self.assertEqual(m.some_map['key1'], d['some_map']['key1'])
         self.assertEqual(m.some_map['key2'], d['some_map']['key2'])
+
+    def test_message_with_proto3_enum_protobuf_to_dict(self):
+        m = SomeMessage()
+        m.enum_field = 0
+        d = protobuf_to_dict(m)
+        self.assertEqual(d['enum_field'], 0)
+
+        m = SomeMessage()
+        m.enum_field = 1
+        d = protobuf_to_dict(m)
+        self.assertEqual(d['enum_field'], 1)
+
+    def test_message_with_proto3_enum_dict_to_protobuf(self):
+        d = {'enum_field': 0}
+        m = dict_to_protobuf(d, SomeMessage)
+        self.assertEqual(m.enum_field, 0)
+
+        d = {'enum_field': 1}
+        m = dict_to_protobuf(d, SomeMessage)
+        self.assertEqual(m.enum_field, 1)

@@ -1,8 +1,14 @@
 syntax = "proto3";
 package tests.proto3;
 
-// protoc --python_out=src -Isrc src/tests/sample.proto
+// protoc --python_out=src -Isrc src/tests/sample-proto3.proto
+
+enum SomeEnum {
+    DEFAULT = 0;
+    OPTION_1 = 1;
+}
 
 message SomeMessage {
     map<string, string> some_map = 1;
+    SomeEnum enum_field = 2;
 }
