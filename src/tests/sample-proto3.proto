@@ -11,4 +11,5 @@ enum SomeEnum {
 message SomeMessage {
     map<string, string> some_map = 1;
     SomeEnum enum_field = 2;
+    bool bool_field = 3;
 }

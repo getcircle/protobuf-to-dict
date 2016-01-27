@@ -40,7 +40,11 @@ def enum_label_name(field, value):
 def protobuf_to_dict(pb, type_callable_map=TYPE_CALLABLE_MAP, use_enum_labels=False):
     result_dict = {}
     extensions = {}
-    enum_fields = [f for f in pb.DESCRIPTOR.fields if f.type == f.TYPE_ENUM]
+    fields_with_defaults = []
+    for f in pb.DESCRIPTOR.fields:
+        if f.type == f.TYPE_ENUM or f.type == f.TYPE_BOOL:
+            fields_with_defaults.append(f)
+
     for field, value in pb.ListFields():
         if isinstance(value, ScalarMap):
             result_dict[field.name] = dict(value.iteritems())
@@ -56,9 +60,12 @@ def protobuf_to_dict(pb, type_callable_map=TYPE_CALLABLE_MAP, use_enum_labels=Fa
 
         result_dict[field.name] = type_callable(value)
         if field.type == f.TYPE_ENUM:
-            enum_fields.remove(field)
+            fields_with_defaults.remove(field)
 
-    for field in enum_fields:
+        if field.type == f.TYPE_BOOL:
+            fields_with_defaults.remove(field)
+
+    for field in fields_with_defaults:
         result_dict[field.name] = field.default_value
 
     if extensions:

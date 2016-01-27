@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='tests/sample-proto3.proto',
   package='tests.proto3',
   syntax='proto3',
-  serialized_pb=b'\n\x19tests/sample-proto3.proto\x12\x0ctests.proto3\"\xa3\x01\n\x0bSomeMessage\x12\x38\n\x08some_map\x18\x01 \x03(\x0b\x32&.tests.proto3.SomeMessage.SomeMapEntry\x12*\n\nenum_field\x18\x02 \x01(\x0e\x32\x16.tests.proto3.SomeEnum\x1a.\n\x0cSomeMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01*%\n\x08SomeEnum\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x00\x12\x0c\n\x08OPTION_1\x10\x01\x62\x06proto3'
+  serialized_pb=b'\n\x19tests/sample-proto3.proto\x12\x0ctests.proto3\"\xb7\x01\n\x0bSomeMessage\x12\x38\n\x08some_map\x18\x01 \x03(\x0b\x32&.tests.proto3.SomeMessage.SomeMapEntry\x12*\n\nenum_field\x18\x02 \x01(\x0e\x32\x16.tests.proto3.SomeEnum\x12\x12\n\nbool_field\x18\x03 \x01(\x08\x1a.\n\x0cSomeMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01*%\n\x08SomeEnum\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x00\x12\x0c\n\x08OPTION_1\x10\x01\x62\x06proto3'
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -39,8 +39,8 @@ _SOMEENUM = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=209,
-  serialized_end=246,
+  serialized_start=229,
+  serialized_end=266,
 )
 _sym_db.RegisterEnumDescriptor(_SOMEENUM)
 
@@ -83,8 +83,8 @@ _SOMEMESSAGE_SOMEMAPENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=161,
-  serialized_end=207,
+  serialized_start=181,
+  serialized_end=227,
 )
 
 _SOMEMESSAGE = _descriptor.Descriptor(
@@ -108,6 +108,13 @@ _SOMEMESSAGE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='bool_field', full_name='tests.proto3.SomeMessage.bool_field', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -121,7 +128,7 @@ _SOMEMESSAGE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=44,
-  serialized_end=207,
+  serialized_end=227,
 )
 
 _SOMEMESSAGE_SOMEMAPENTRY.containing_type = _SOMEMESSAGE

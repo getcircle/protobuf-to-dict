@@ -196,3 +196,23 @@ class Test(unittest.TestCase):
         d = {'enum_field': 1}
         m = dict_to_protobuf(d, SomeMessage)
         self.assertEqual(m.enum_field, 1)
+
+    def test_message_with_proto3_bool_protobuf_to_dict(self):
+        m = SomeMessage()
+        m.bool_field = False
+        d = protobuf_to_dict(m)
+        self.assertEqual(d['bool_field'], False)
+
+        m = SomeMessage()
+        m.bool_field = True
+        d = protobuf_to_dict(m)
+        self.assertEqual(d['bool_field'], True)
+
+    def test_message_with_proto3_bool_dict_to_protobuf(self):
+        d = {'bool_field': False}
+        m = dict_to_protobuf(d, SomeMessage)
+        self.assertEqual(m.bool_field, False)
+
+        d = {'bool_field': True}
+        m = dict_to_protobuf(d, SomeMessage)
+        self.assertEqual(m.bool_field, True)
